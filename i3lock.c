@@ -313,6 +313,7 @@ double bar_step = 15;
 double bar_base_height = 25;
 double bar_periodic_step = 15;
 double max_bar_height = 25;
+double bar_cava_decay = 0.5;
 int bar_count = 10;
 int bar_orientation = BAR_FLAT;
 
@@ -322,6 +323,7 @@ char bar_y_expr[32] = ""; // empty string on y means use x as offset based on or
 char bar_width_expr[32] = ""; // empty string means full width based on bar orientation
 bool bar_bidirectional = false;
 bool bar_reversed = false;
+bool bar_cava_style = false;
 
 enum IMAGE_FORMAT {
     IMAGE_FORMAT_UNKNOWN,
@@ -1907,6 +1909,8 @@ int main(int argc, char *argv[]) {
         {"bar-pos", required_argument, NULL, 709},
         {"bar-count", required_argument, NULL, 710},
         {"bar-total-width", required_argument, NULL, 711},
+        {"bar-cava-style", no_argument, NULL, 712},
+        {"bar-cava-decay", required_argument, NULL, 713},
 
         // misc.
         {"redraw-thread", no_argument, NULL, 900},
@@ -2570,6 +2574,14 @@ int main(int argc, char *argv[]) {
                 if (sscanf(arg, "%31s", bar_width_expr) != 1) {
                     errx(1, "missing argument for bar-total-width\n");
                 }
+                break;
+            case 712:
+                bar_cava_style = true;
+                break;
+            case 713:
+                bar_cava_decay = strtod(optarg, NULL);
+                if (!bar_cava_decay)
+                    bar_cava_decay = 0.5;
                 break;
 
 			// Misc
