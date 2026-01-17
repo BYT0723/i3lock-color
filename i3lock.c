@@ -1650,10 +1650,11 @@ static void raise_loop(xcb_window_t window) {
 /*
  * Loads an image from the given path. Handles JPEG and PNG. Returns NULL in case of error.
  */
-cairo_surface_t *load_image(enum IMAGE_FORMAT format) {
+cairo_surface_t *load_image(char *image_path) {
     cairo_surface_t *img = NULL;
     JPEG_INFO jpg_info;
     unsigned char *jpg_data;
+    enum IMAGE_FORMAT format = verify_image(image_path);
 
     switch (format) {
         case IMAGE_FORMAT_RAW:
@@ -2745,14 +2746,13 @@ int main(int argc, char *argv[]) {
     init_colors_once();
     if (image_path != NULL) {
         if (!is_directory(image_path)) {
-            enum IMAGE_FORMAT image_format = verify_image(image_path);
-            img = load_image(image_format);
+            img = load_image(image_path);
         } else {
             /* Path to a directory is provided -> use slideshow mode */
             slideshow_path = strdup(image_path);
-            if (!load_slideshow_images(slideshow_path)) exit(EXIT_FAILURE);
-            enum IMAGE_FORMAT image_format = verify_image(img_slideshow[0]);
-            img = load_image(image_format);
+            if (!load_slideshow_images(slideshow_path))
+                exit(EXIT_FAILURE);
+            img = load_image(img_slideshow[0]);
         }
         free(image_path);
     }
