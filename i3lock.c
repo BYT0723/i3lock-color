@@ -258,6 +258,8 @@ struct gif *gif_img = NULL;
 int gif_img_count = 0;
 
 cairo_surface_t *img = NULL;
+cairo_surface_t *last_img = NULL;
+cairo_surface_t *cached_img = NULL;
 char *img_slideshow[256];
 cairo_surface_t *blur_bg_img = NULL;
 int slideshow_image_count = 0;
